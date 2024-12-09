@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="search_hint">Search books...</string>
+    <string name="close_content_description">Clear search query</string>
+</resources>
