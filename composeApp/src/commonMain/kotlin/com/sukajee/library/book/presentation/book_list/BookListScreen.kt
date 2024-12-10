@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sukajee.library.book.domain.Book
+import com.sukajee.library.book.presentation.components.BookListItem
 import com.sukajee.library.book.presentation.components.BookSearchBar
 import com.sukajee.library.core.presentation.DarkBlue
 import org.koin.compose.viewmodel.koinViewModel
@@ -61,6 +62,22 @@ private fun BookListScreen(
             modifier = Modifier
                 .widthIn(max = 400.dp)
                 .padding(16.dp)
+        )
+        BookListItem(
+            book = Book(
+                id = "dddd",
+                title = "Some book title",
+                imageUrl = "",
+                authors = listOf("Ram Bahadur Tamang"),
+                description = "",
+                languages = listOf(),
+                firstPublishedYear = "",
+                averageRating = 4.3333,
+                ratingsCount = 344,
+                numPages = 455,
+                numEditions = 27
+            ),
+            onBookClick = {}
         )
     }
 }

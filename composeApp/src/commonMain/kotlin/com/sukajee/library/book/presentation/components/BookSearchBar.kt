@@ -29,7 +29,6 @@ import library.composeapp.generated.resources.Res
 import library.composeapp.generated.resources.close_content_description
 import library.composeapp.generated.resources.search_hint
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun BookSearchBar(
