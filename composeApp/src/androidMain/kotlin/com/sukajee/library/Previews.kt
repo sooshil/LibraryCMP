@@ -8,6 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sukajee.library.book.domain.Book
+import com.sukajee.library.book.presentation.book_list.BookListScreen
+import com.sukajee.library.book.presentation.book_list.BookListState
+import com.sukajee.library.book.presentation.components.BookList
 import com.sukajee.library.book.presentation.components.BookSearchBar
 
 @Preview(showBackground = true)
@@ -17,7 +21,9 @@ fun SearchBarPreview(
 ) {
     MaterialTheme {
         Box(
-            modifier = Modifier.fillMaxWidth().padding(8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
         ) {
             BookSearchBar(
                 searchQuery = "",
@@ -26,4 +32,37 @@ fun SearchBarPreview(
             )
         }
     }
+}
+
+private val books = (1..100).map {
+    Book(
+        id = it.toString(),
+        title = "Sample Book - $it",
+        imageUrl = "sample url",
+        authors = listOf("Sample Author"),
+        description = "Sample Description",
+        languages = listOf("English"),
+        firstPublishedYear = "1988",
+        averageRating = 4.33299,
+        ratingsCount = 445,
+        numPages = 83,
+        numEditions = 4
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun BookListScreenPreview() {
+    MaterialTheme {
+        BookListScreen(
+            state = BookListState(
+                searchQuery = "",
+                searchResults = books
+            ),
+            onAction = {
+
+            }
+        )
+    }
+
 }

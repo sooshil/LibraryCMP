@@ -4,4 +4,6 @@
     <string name="close_content_description">Clear search query</string>
     <string name="book_image_content_description">Image of the book titled %1$s.</string>
     <string name="open_book_detail_arrow_content_description">Image of the book titled %1$s.</string>
+    <string name="search_results">Search Results</string>
+    <string name="favourites">Favourites</string>
 </resources>

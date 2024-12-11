@@ -49,14 +49,14 @@ import kotlin.math.round
 @Composable
 fun BookListItem(
     book: Book,
-    onBookClick: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(
         shape = RoundedCornerShape(16.dp),
         modifier = modifier
             .clickable(
-                onClick = onBookClick
+                onClick = onClick
             )
     ) {
         Row(
@@ -116,7 +116,7 @@ fun BookListItem(
                 Text(
                     text = book.title ?: "",
                     maxLines = 2,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleLarge,
                     overflow = TextOverflow.Ellipsis,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
@@ -142,6 +142,12 @@ fun BookListItem(
                             contentDescription = null,
                             tint = SandYellow
                         )
+                        book.ratingsCount?.let { ratingsCount ->
+                            Text(
+                                text = "($ratingsCount)",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                     }
                 }
             }
