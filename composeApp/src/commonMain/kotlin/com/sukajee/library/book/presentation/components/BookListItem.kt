@@ -62,6 +62,7 @@ fun BookListItem(
             ),
         color = Color.Cyan.copy(alpha = 0.2f)
     ) {
+        val imageAspectRatio = 0.7f
         Row(
             modifier = Modifier
                 .padding(16.dp)
@@ -70,7 +71,8 @@ fun BookListItem(
         ) {
             Box(
                 modifier = Modifier
-                    .height(100.dp),
+                    .height(100.dp)
+                    .aspectRatio(imageAspectRatio),
                 contentAlignment = Alignment.Center
             ) {
                 var imageLoadResult by remember {
@@ -103,7 +105,7 @@ fun BookListItem(
                             ),
                             contentScale = if (result.isSuccess) ContentScale.Crop else ContentScale.Fit,
                             modifier = Modifier.aspectRatio(
-                                ratio = 0.65f,
+                                ratio = imageAspectRatio,
                                 matchHeightConstraintsFirst = true
                             )
                         )
