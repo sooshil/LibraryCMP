@@ -30,6 +30,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
@@ -53,11 +55,12 @@ fun BookListItem(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        shape = RoundedCornerShape(16.dp),
         modifier = modifier
+            .clip(RoundedCornerShape(16.dp))
             .clickable(
                 onClick = onClick
-            )
+            ),
+        color = Color.Cyan.copy(alpha = 0.2f)
     ) {
         Row(
             modifier = Modifier
@@ -94,10 +97,10 @@ fun BookListItem(
                     else -> {
                         Image(
                             painter = if (result.isSuccess) painter else painterResource(resource = Res.drawable.book),
-                            contentDescription = UiText.StringResourceId(
-                                id = Res.string.book_image_content_description,
-                                args = book.title?.let { arrayOf(it) } ?: arrayOf()
-                            ).asString(),
+                            contentDescription = stringResource(
+                                resource = Res.string.book_image_content_description,
+                                formatArgs = book.title?.let { arrayOf(it) } ?: arrayOf()
+                            ),
                             contentScale = if (result.isSuccess) ContentScale.Crop else ContentScale.Fit,
                             modifier = Modifier.aspectRatio(
                                 ratio = 0.65f,

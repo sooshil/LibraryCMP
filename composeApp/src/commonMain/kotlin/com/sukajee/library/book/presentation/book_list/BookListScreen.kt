@@ -1,13 +1,19 @@
 package com.sukajee.library.book.presentation.book_list
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -15,24 +21,26 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sukajee.library.book.domain.Book
 import com.sukajee.library.book.presentation.components.BookList
-import com.sukajee.library.book.presentation.components.BookListItem
 import com.sukajee.library.book.presentation.components.BookSearchBar
 import com.sukajee.library.core.presentation.DarkBlue
 import com.sukajee.library.core.presentation.DesertWhite
 import com.sukajee.library.core.presentation.SandYellow
-import com.sukajee.library.core.presentation.UiText
 import library.composeapp.generated.resources.Res
 import library.composeapp.generated.resources.favourites
+import library.composeapp.generated.resources.no_favorite_books
 import library.composeapp.generated.resources.search_results
+import library.composeapp.generated.resources.search_results_empty
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -61,6 +69,22 @@ fun BookListScreen(
     onAction: (BookListAction) -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
+    val pagerState = rememberPagerState { 2 }
+    val searchResultsLazyListState = rememberLazyListState()
+    val favouriteResultsLazyListState = rememberLazyListState()
+
+    LaunchedEffect(state.searchResults) {
+        searchResultsLazyListState.animateScrollToItem(0)
+    }
+
+    LaunchedEffect(state.selectedTabIndex) {
+        pagerState.animateScrollToPage(state.selectedTabIndex)
+    }
+
+    LaunchedEffect(pagerState.currentPage) {
+        onAction(BookListAction.OnTabSelected(pagerState.currentPage))
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -134,6 +158,69 @@ fun BookListScreen(
                             text = stringResource(Res.string.favourites),
                             modifier = Modifier.padding(vertical = 16.dp)
                         )
+                    }
+                }
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                ) { pageIndex ->
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        when (pageIndex) {
+                            0 -> if (state.isLoading) CircularProgressIndicator()
+                            else {
+                                when {
+                                    state.errorMessage != null -> {
+                                        Text(
+                                            text = state.errorMessage.asString(),
+                                            textAlign = TextAlign.Center,
+                                            style = MaterialTheme.typography.headlineSmall,
+                                            color = MaterialTheme.colorScheme.error
+                                        )
+
+                                    }
+
+                                    state.searchResults.isEmpty() -> {
+                                        Text(
+                                            text = stringResource(Res.string.search_results_empty),
+                                            textAlign = TextAlign.Center,
+                                            style = MaterialTheme.typography.headlineSmall,
+                                            color = MaterialTheme.colorScheme.error
+                                        )
+                                    }
+
+                                    else -> BookList(
+                                        books = state.searchResults,
+                                        onBookClick = {
+                                            onAction(BookListAction.OnBookClick(it))
+                                        },
+                                        scrollState = searchResultsLazyListState
+                                    )
+                                }
+                            }
+
+                            else -> {
+                                if (state.favouriteBooks.isEmpty()) {
+                                    Text(
+                                        text = stringResource(Res.string.no_favorite_books),
+                                        textAlign = TextAlign.Center,
+                                        style = MaterialTheme.typography.headlineSmall
+                                    )
+                                } else {
+                                    BookList(
+                                        books = state.favouriteBooks,
+                                        onBookClick = {
+                                            onAction(BookListAction.OnBookClick(it))
+                                        },
+                                        scrollState = favouriteResultsLazyListState
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }

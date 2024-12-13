@@ -6,4 +6,14 @@
     <string name="open_book_detail_arrow_content_description">Image of the book titled %1$s.</string>
     <string name="search_results">Search Results</string>
     <string name="favourites">Favourites</string>
+    <string name="search_results_empty">No books found for that name. Please try searching for different book.</string>
+    <string name="no_favorite_books">You have not saved any books yet.</string>
+    <string name="disk_full_error">Disk is full. Please try clearing some space.</string>
+    <string name="unknown_error">Something went wrong. Please try again later.</string>
+    <string name="request_timeout_error">Request timed out. Please try again later.</string>
+    <string name="too_many_requests_error">Too many requests. Please try again later.</string>
+    <string name="server_error">Server error. Please try again later.</string>
+    <string name="no_internet_error">No internet connection. Please check your connection and try again.</string>
+    <string name="serialization_error">Serialization error. Please try again later.</string>
+
 </resources>
