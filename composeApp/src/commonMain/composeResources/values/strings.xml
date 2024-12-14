@@ -25,5 +25,6 @@
     <string name="go_back">Go Back</string>
     <string name="mark_as_favourite">Mark as Favourite</string>
     <string name="remove_as_favourite">Remove from Favourites</string>
+    <string name="description_unavailable">Description not available</string>
 
 </resources>
