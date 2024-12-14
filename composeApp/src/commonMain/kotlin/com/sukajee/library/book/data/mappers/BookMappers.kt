@@ -6,7 +6,7 @@ import com.sukajee.library.book.domain.Book
 fun SearchedBookDto.toBook(): Book {
     val imageUrlPart = if(coverKey != null) "olid/${coverKey}-L.jpg" else "id/${coverAlternativeKey}-L.jpg"
     return Book(
-        id = id,
+        id = id.substringAfterLast('/'),
         title = title,
         imageUrl = "https://covers.openlibrary.org/b/$imageUrlPart",
         authors = authorNames,

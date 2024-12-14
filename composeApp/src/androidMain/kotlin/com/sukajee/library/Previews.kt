@@ -11,8 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.sukajee.library.book.domain.Book
 import com.sukajee.library.book.presentation.book_list.BookListScreen
 import com.sukajee.library.book.presentation.book_list.BookListState
-import com.sukajee.library.book.presentation.components.BookList
-import com.sukajee.library.book.presentation.components.BookSearchBar
+import com.sukajee.library.book.presentation.book_list.components.BookSearchBar
 
 @Preview(showBackground = true)
 @Composable

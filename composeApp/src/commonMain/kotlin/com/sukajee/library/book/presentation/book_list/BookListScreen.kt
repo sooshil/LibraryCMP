@@ -31,8 +31,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sukajee.library.book.domain.Book
-import com.sukajee.library.book.presentation.components.BookList
-import com.sukajee.library.book.presentation.components.BookSearchBar
+import com.sukajee.library.book.presentation.book_list.components.BookList
+import com.sukajee.library.book.presentation.book_list.components.BookSearchBar
 import com.sukajee.library.core.presentation.DarkBlue
 import com.sukajee.library.core.presentation.DesertWhite
 import com.sukajee.library.core.presentation.SandYellow
