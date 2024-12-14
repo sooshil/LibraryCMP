@@ -16,7 +16,7 @@
     <string name="no_internet_error">No internet connection. Please check your connection and try again.</string>
     <string name="serialization_error">Serialization error. Please try again later.</string>
 
-    <string name="book_cover">Book Cover</string>
+    <string name="book_cover">Cover of the book</string>
     <string name="rating">Rating</string>
     <string name="pages">Pages</string>
     <string name="languages">Languages</string>
