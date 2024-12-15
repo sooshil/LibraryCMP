@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import com.sukajee.library.core.presentation.DarkBlue
 import com.sukajee.library.core.presentation.DesertWhite
+import com.sukajee.library.core.presentation.PulseAnimation
 import com.sukajee.library.core.presentation.SandYellow
 import library.composeapp.generated.resources.Res
 import library.composeapp.generated.resources.book
@@ -54,7 +55,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun BlurredImageBackground(
-    imageUrl: String,
+    imageUrl: String?,
     isFavorite: Boolean,
     onFavouriteClick: () -> Unit,
     onBackClick: () -> Unit,
@@ -67,19 +68,17 @@ fun BlurredImageBackground(
     val painter = rememberAsyncImagePainter(
         model = imageUrl,
         onSuccess = {
-            imageLoadResult =
-                if (it.painter.intrinsicSize.width > 1 && it.painter.intrinsicSize.height > 1) {
-                    Result.success(it.painter)
-                } else {
-                    Result.failure(IllegalArgumentException("Invalid image size"))
-                }
+            val size = it.painter.intrinsicSize
+            imageLoadResult = if(size.width > 1 && size.height > 1) {
+                Result.success(it.painter)
+            } else {
+                Result.failure(Exception("Invalid image dimensions"))
+            }
         },
         onError = {
             it.result.throwable.printStackTrace()
-            imageLoadResult = Result.failure(it.result.throwable)
         }
     )
-
 
     Box(modifier = modifier) {
         Column(
@@ -92,96 +91,106 @@ fun BlurredImageBackground(
                     .fillMaxWidth()
                     .background(DarkBlue)
             ) {
-                imageLoadResult?.getOrNull()?.let { painter ->
-                    Image(
-                        painter = painter,
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .blur(20.dp)
-                    )
-                }
+                Image(
+                    painter = painter,
+                    contentDescription = stringResource(Res.string.book_cover),
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .blur(20.dp)
+                )
             }
+
             Box(
                 modifier = Modifier
                     .weight(0.7f)
                     .fillMaxWidth()
                     .background(DesertWhite)
-            ) {
-                //content()
-            }
+            )
         }
+
         IconButton(
             onClick = onBackClick,
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(start = 8.dp)
+                .padding(top = 16.dp, start = 16.dp)
                 .statusBarsPadding()
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = stringResource(Res.string.go_back),
-                modifier = Modifier.size(32.dp)
+                tint = Color.White
             )
         }
+
         Column(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Spacer(
-                modifier = Modifier
-                    .fillMaxHeight(0.15f)
-            )
+            Spacer(modifier = Modifier.fillMaxHeight(0.15f))
             ElevatedCard(
                 modifier = Modifier
-                    .height(270.dp)
+                    .height(230.dp)
                     .aspectRatio(2 / 3f),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.elevatedCardColors(
-                    containerColor = Transparent,
-                ),
+                shape = RoundedCornerShape(8.dp),
                 elevation = CardDefaults.elevatedCardElevation(
-                    defaultElevation = 16.dp
+                    defaultElevation = 15.dp
                 )
             ) {
                 AnimatedContent(
                     targetState = imageLoadResult
-                ) { resuult ->
-                    when (resuult) {
-                        null -> CircularProgressIndicator()
+                ) { result ->
+                    when(result) {
+                        null -> Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            PulseAnimation(
+                                modifier = Modifier
+                                    .size(60.dp)
+                            )
+                        }
                         else -> {
                             Box {
                                 Image(
-                                    painter = if (resuult.isSuccess) {
-                                        painter
-                                    } else painterResource(Res.drawable.book),
+                                    painter = if(result.isSuccess) painter else {
+                                        painterResource(Res.drawable.book)
+                                    },
                                     contentDescription = stringResource(Res.string.book_cover),
                                     modifier = Modifier
                                         .fillMaxSize()
-                                        .background(Transparent),
-                                    contentScale = if (resuult.isSuccess) ContentScale.Crop
-                                    else ContentScale.Fit
+                                        .background(Color.Transparent),
+                                    contentScale = if(result.isSuccess) {
+                                        ContentScale.Crop
+                                    } else {
+                                        ContentScale.Fit
+                                    }
                                 )
                                 IconButton(
                                     onClick = onFavouriteClick,
-                                    modifier = Modifier.align(Alignment.BottomEnd)
+                                    modifier = Modifier
+                                        .align(Alignment.BottomEnd)
                                         .background(
                                             brush = Brush.radialGradient(
                                                 colors = listOf(
-                                                    SandYellow,
-                                                    Transparent
+                                                    SandYellow, Color.Transparent
                                                 ),
                                                 radius = 70f
                                             )
                                         )
                                 ) {
                                     Icon(
-                                        imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                                        imageVector = if(isFavorite) {
+                                            Icons.Filled.Favorite
+                                        } else {
+                                            Icons.Outlined.FavoriteBorder
+                                        },
                                         tint = Color.Red,
-                                        contentDescription = if (isFavorite) stringResource(Res.string.remove_as_favourite)
-                                        else stringResource(Res.string.mark_as_favourite)
+                                        contentDescription = if(isFavorite) {
+                                            stringResource(Res.string.remove_as_favourite)
+                                        } else {
+                                            stringResource(Res.string.mark_as_favourite)
+                                        }
                                     )
                                 }
                             }

@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import com.sukajee.library.book.domain.Book
+import com.sukajee.library.core.presentation.PulseAnimation
 import com.sukajee.library.core.presentation.SandYellow
 import com.sukajee.library.core.presentation.UiText
 import library.composeapp.generated.resources.Res
@@ -95,7 +96,12 @@ fun BookListItem(
                 )
 
                 when (val result = imageLoadResult) {
-                    null -> CircularProgressIndicator()
+                    null -> PulseAnimation(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f)
+                    )
+
                     else -> {
                         Image(
                             painter = if (result.isSuccess) painter else painterResource(resource = Res.drawable.book),

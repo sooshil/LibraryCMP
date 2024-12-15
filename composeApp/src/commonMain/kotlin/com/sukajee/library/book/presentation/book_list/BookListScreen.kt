@@ -3,9 +3,11 @@ package com.sukajee.library.book.presentation.book_list
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -35,6 +37,7 @@ import com.sukajee.library.book.presentation.book_list.components.BookList
 import com.sukajee.library.book.presentation.book_list.components.BookSearchBar
 import com.sukajee.library.core.presentation.DarkBlue
 import com.sukajee.library.core.presentation.DesertWhite
+import com.sukajee.library.core.presentation.PulseAnimation
 import com.sukajee.library.core.presentation.SandYellow
 import library.composeapp.generated.resources.Res
 import library.composeapp.generated.resources.favourites
@@ -171,7 +174,10 @@ fun BookListScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         when (pageIndex) {
-                            0 -> if (state.isLoading) CircularProgressIndicator()
+                            0 -> if (state.isLoading) PulseAnimation(
+                                modifier = Modifier
+                                    .size(80.dp)
+                            )
                             else {
                                 when {
                                     state.errorMessage != null -> {
