@@ -10,6 +10,8 @@ import com.sukajee.library.core.domain.onError
 import com.sukajee.library.core.domain.onSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -25,17 +27,22 @@ class BookDetailViewModel(
     val state = _state
         .onStart {
             getBookDescription()
+            observeFavouriteStatus()
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _state.value)
 
     fun onAction(action: BookDetailAction) {
         when (action) {
-            BookDetailAction.OnBackClick -> {
-
-            }
-
             BookDetailAction.OnFavoriteClick -> {
-
+                viewModelScope.launch {
+                    if (state.value.isFavourite) {
+                        repository.deleteBookFromFavourite(bookId)
+                    } else {
+                        state.value.book?.let {
+                            repository.markBookAsFavourite(it)
+                        }
+                    }
+                }
             }
 
             is BookDetailAction.OnSelectedBookChange -> {
@@ -45,10 +52,23 @@ class BookDetailViewModel(
                     )
                 }
             }
+            else -> Unit
         }
     }
 
-    fun getBookDescription() {
+    private fun observeFavouriteStatus() {
+        repository.isBookFavourite(bookId)
+            .onEach { isFavourite ->
+                _state.update { currentState ->
+                    currentState.copy(
+                        isFavourite = isFavourite
+                    )
+                }
+            }
+            .launchIn(viewModelScope)
+    }
+
+    private fun getBookDescription() {
         viewModelScope.launch {
             repository
                 .getBookDescription(bookId = bookId)

@@ -3,7 +3,7 @@ package com.sukajee.library.book.data.database
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "book")
 data class BookEntity(
     @PrimaryKey(autoGenerate = false) val id: String,
     val title: String?,

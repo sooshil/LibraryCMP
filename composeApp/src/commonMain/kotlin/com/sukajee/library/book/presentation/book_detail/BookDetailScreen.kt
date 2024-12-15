@@ -60,7 +60,7 @@ fun BookDetailScreenRoot(
 
                 else -> Unit
             }
-            viewModel::onAction
+            viewModel.onAction(action)
         }
     )
 }

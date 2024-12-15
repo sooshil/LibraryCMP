@@ -216,6 +216,7 @@ fun BookListScreen(
                                         onBookClick = {
                                             onAction(BookListAction.OnBookClick(it))
                                         },
+                                        modifier = Modifier.fillMaxSize(),
                                         scrollState = favouriteResultsLazyListState
                                     )
                                 }
