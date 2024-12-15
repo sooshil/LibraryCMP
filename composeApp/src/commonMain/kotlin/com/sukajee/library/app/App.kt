@@ -1,5 +1,9 @@
 package com.sukajee.library.app
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -42,9 +46,29 @@ fun App() {
             navigation<Routes.BookGraph>(
                 startDestination = Routes.BookList
             ) {
-                composable<Routes.BookList> {
+                composable<Routes.BookList>(
+                    exitTransition = {
+                        slideOutHorizontally(
+                            animationSpec = tween(
+                                durationMillis = 1000
+                            )
+                        ) { initialOffset ->
+                            -initialOffset
+                        }
+                    },
+                    popEnterTransition = {
+                        slideInHorizontally(
+                            animationSpec = tween(
+                                durationMillis = 1000
+                            )
+                        ) { initialOffset ->
+                            -initialOffset
+                        }
+                    }
+                ) {
                     val viewModel = koinViewModel<BookListViewModel>()
-                    val selectedBookViewModel = it.sharedKoinViewModel<SelectedBookViewModel>(navController)
+                    val selectedBookViewModel =
+                        it.sharedKoinViewModel<SelectedBookViewModel>(navController)
 
                     LaunchedEffect(true) {
                         selectedBookViewModel.onSelectBook(null)
@@ -63,11 +87,32 @@ fun App() {
                     )
                 }
 
-                composable<Routes.BookDetail> {
-                    val selectedBookViewModel = it.sharedKoinViewModel<SelectedBookViewModel>(navController)
+                composable<Routes.BookDetail>(
+                    enterTransition = {
+                        slideInHorizontally(
+                            animationSpec = tween(
+                                durationMillis = 1000
+                            )
+                        ) { initialOffset ->
+                            initialOffset
+                        }
+
+                    },
+                    exitTransition = {
+                        slideOutHorizontally(
+                            animationSpec = tween(
+                                durationMillis = 1000
+                            )
+                        ) { initialOffset ->
+                            initialOffset
+                        }
+                    }
+                ) {
+                    val selectedBookViewModel =
+                        it.sharedKoinViewModel<SelectedBookViewModel>(navController)
                     val selectedBook by selectedBookViewModel.selectedBook.collectAsStateWithLifecycle()
                     val viewModel = koinViewModel<BookDetailViewModel>()
-                    LaunchedEffect(selectedBook ) {
+                    LaunchedEffect(selectedBook) {
                         selectedBook?.let { book ->
                             viewModel.onAction(BookDetailAction.OnSelectedBookChange(book = book))
                         }
@@ -84,7 +129,7 @@ fun App() {
 }
 
 @Composable
-private inline fun <reified T: ViewModel> NavBackStackEntry.sharedKoinViewModel(
+private inline fun <reified T : ViewModel> NavBackStackEntry.sharedKoinViewModel(
     navController: NavController
 ): T {
     val navGraphRoute = destination.parent?.route ?: return koinViewModel<T>()
