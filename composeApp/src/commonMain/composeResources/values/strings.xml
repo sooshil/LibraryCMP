@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="search_hint">Search books...</string>
+    <string name="close_content_description">Clear search query</string>
+    <string name="book_image_content_description">Image of the book titled %1$s.</string>
+    <string name="open_book_detail_arrow_content_description">Image of the book titled %1$s.</string>
+    <string name="search_results">Search Results</string>
+    <string name="favourites">Favourites</string>
+    <string name="search_results_empty">No books found for that name. Please try searching for different book.</string>
+    <string name="no_favorite_books">You have not saved any books yet.</string>
+    <string name="disk_full_error">Disk is full. Please try clearing some space.</string>
+    <string name="unknown_error">Something went wrong. Please try again later.</string>
+    <string name="request_timeout_error">Request timed out. Please try again later.</string>
+    <string name="too_many_requests_error">Too many requests. Please try again later.</string>
+    <string name="server_error">Server error. Please try again later.</string>
+    <string name="no_internet_error">No internet connection. Please check your connection and try again.</string>
+    <string name="serialization_error">Serialization error. Please try again later.</string>
+
+    <string name="book_cover">Cover of the book</string>
+    <string name="rating">Rating</string>
+    <string name="pages">Pages</string>
+    <string name="languages">Languages</string>
+    <string name="synopsis">Synopsis</string>
+    <string name="desc_not_available">Description not available</string>
+    <string name="go_back">Go Back</string>
+    <string name="mark_as_favourite">Mark as Favourite</string>
+    <string name="remove_as_favourite">Remove from Favourites</string>
+    <string name="description_unavailable">Description not available</string>
+
+</resources>
