@@ -1,5 +1,8 @@
 package com.sukajee.library.di
 
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.sukajee.library.book.data.database.DatabaseFactory
+import com.sukajee.library.book.data.database.FavouriteBooksDatabase
 import com.sukajee.library.book.data.network.KtorRemoteBookDataSource
 import com.sukajee.library.book.data.network.RemoteBookDataSource
 import com.sukajee.library.book.data.repository.DefaultRepository
@@ -22,6 +25,16 @@ val sharedModule = module {
             engine = get()
         )
     }
+
+    single {
+        get<DatabaseFactory>()
+            .create()
+            .setDriver(BundledSQLiteDriver())
+            .build()
+    }
+
+    single { get<FavouriteBooksDatabase>().dao }
+
     singleOf(::KtorRemoteBookDataSource).bind<RemoteBookDataSource>()
     singleOf(::DefaultRepository).bind<BookRepository>()
 
